@@ -1,0 +1,47 @@
+1. Thực hành Chỉ mục trong MySql.
+ALTER TABLE customers ADD INDEX idx_customerNumber(customerNumber);
+ALTER TABLE customers ADD INDEX idx_full_name(contactFirstName, contactLastName);
+2. Thực hành Store Procedure.
+DELIMITER //
+
+CREATE PROCEDURE findAllCustomers()
+
+BEGIN
+
+  SELECT * FROM customers;
+
+END //
+
+DELIMITER ;
+
+- Cách gọi procedure
+
+call findAllCustomers();
+- Drop để xóa đi Procedure
+ drop procedure findAllCustomers;
+
+3. Truyền tham số vào Store Procedure
+
+DELIMITER //
+
+CREATE PROCEDURE getCusById
+
+(IN cusNum INT(11))
+
+BEGIN
+
+  SELECT * FROM customers WHERE customerNumber = cusNum;
+
+END //
+
+DELIMITER ;
+
+4. View trong MySql
+
+CREATE VIEW customer_views AS
+
+SELECT customerNumber, customerName, phone
+
+FROM  customers;
+5. Bài tập View, Index, Store Procedure
+

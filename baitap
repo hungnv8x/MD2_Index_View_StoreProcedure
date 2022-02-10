@@ -1,0 +1,94 @@
+create database demo;
+
+create table product
+(
+    id                 int auto_increment primary key,
+    productCode        int,
+    productName        varchar(50),
+    productPrice       float,
+    productAmount      int,
+    productDescription varchar(255),
+    productStatus      varchar(50)
+);
+
+insert into product(productcode, productname, productprice, productamount, productdescription, productstatus)
+values (11,'quan',10000,100,'quan mua dong','con hang');
+insert into product(productcode, productname, productprice, productamount, productdescription, productstatus)
+values (12,'ao',20000,50,'ao mua dong','con hang');
+insert into product(productcode, productname, productprice, productamount, productdescription, productstatus)
+values (13,'ao khoac',30000,200,'ao khoac mua dong','con hang');
+
+alter table product add index idx_productCode(productCode);
+alter table product add  index idx_productName_productPrice(productName,productPrice);
+
+-- tạo view.
+create view product_views as
+select productCode, productName, productPrice, productStatus
+from product;
+
+insert into product_views values (14,'vay',40000,'con hang');
+
+select * from  product_views;
+
+drop view product_views;
+
+-- tạo procedure.
+delimiter //
+
+create procedure getAll_product()
+begin
+    select * from product;
+end //
+
+delimiter ;
+
+call getAll_product();
+
+-- procedure them sp moi.
+delimiter //
+create procedure insert_product(
+    in Code int,
+    in Name varchar(50),
+    in Price float,
+    in Amount int,
+    in Description varchar(255),
+    in Status varchar(50)
+)
+begin
+    insert into product(productCode, productName, productPrice, productAmount, productDescription, productStatus)
+        values (Code,Name,Price,Amount,Description,Status);
+end //
+delimiter ;
+
+call insert_product(15,'Quan Au',250000,10,'Quan Au xuat khau','Con hang');
+
+-- procedure sua thong tin theo id
+
+delimiter //
+create procedure update_product(
+    in product_id int,
+    in Code int,
+    in Name varchar(50),
+    in Price float,
+    in Amount int,
+    in Description varchar(255),
+    in Status varchar(50)
+)
+begin
+    update product set productCode = Code, productName = Name, productPrice = Price,
+                       productAmount = Amount, productDescription = Description, productStatus = Status
+    where id = product_id;
+end //
+delimiter ;
+
+call update_product(1,11,'quan',9000,99,'Quan mua dong','Con hang');
+
+-- procedure xoa sp theo id
+delimiter //
+create procedure delete_product(in product_id int)
+begin
+    delete from product where id = product_id;
+end //
+delimiter ;
+
+call delete_product(5)
